@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'io.fabric'
+apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+android {
+    signingConfigs {
+        keyWeather {
+            keyAlias 'keyWeather'
+            keyPassword '123456'
+            storeFile file("..\\weather.jks")
+            storePassword '123456'
+        }
+    }
+
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "ezike.tobenna.myweather"
+        minSdkVersion min_sdk_version
+        targetSdkVersion compile_sdk_version
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField 'String', "ApiKey", "\"e5235257b00adf728e360a7521c9e096\""
+            buildConfigField 'String', "BaseUrl", "\"http://api.weatherstack.com/\""
+//            resValue 'string', "api_key", "c1b490e5810e7515ef5bdcf47f8497ad"
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "ApiKey", "c1b490e5810e7515ef5bdcf47f8497ad"
+            buildConfigField 'String', "BaseUrl", "\"http://api.weatherstack.com/\""
+            resValue 'string', "api_key", "c1b490e5810e7515ef5bdcf47f8497ad"
+            signingConfig signingConfigs.keyWeather
+        }
+    }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
+
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree (include: ['*.jar'], dir: 'libs')
+    implementation libraries
+    implementation arch_libraries
+    kapt librariesKapt
+
+    testImplementation testLibraries
+    androidTestImplementation androidTestLibraries
+}
